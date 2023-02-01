@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <button id="button">小demo</button>
+    <div id="text"></div>
+    <script>
+        // 跨域问题
+        const username = 'pjw'
+        const password = '123456'
+        async function main() {
+            const result = await axios.get(`http://localhost:8080/user`, {
+                headers: {
+                    pjw: 'pjw'
+                },
+                query: {
+                    password,
+                    username
+                }
+            })
+            console.log(result.data)
+            // 设置一下前端的内容
+            setTextToDiv(result.data)
+        }
+        // main()
+
+        function setTextToDiv(text) {
+            const element = document.getElementById('text')
+            element.innerHTML = text;
+        }
+
+        // 当点击button按钮的时候，调用main函数
+        const button = document.getElementById('button')
+        button.addEventListener('click', () => {
+            main()
+        })
+    </script>
+</body>
+
+</html>

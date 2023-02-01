@@ -48,9 +48,13 @@ const Koa = require('koa')
 const KoaMount = require('koa-mount')
 const KoaStatic = require('koa-static')
 const { koaBody } = require('koa-body')
+const path = require('path')
+const {router} = require('./src/router/index')
+
+const STATIC_FILE_URL = path.join(__dirname, './static')
+const DOWNLOAD_URL = 'http://localhost:3000/download'
 // 创建koa应用
 const app = new Koa();
-
 // 文件
 const middleStatic = KoaStatic('./static', {
     setHeaders: function (resp) {
@@ -65,20 +69,24 @@ const mainSite = KoaStatic('./website')
 // 1.开发一个静态文件服务器
 app.use(KoaMount('/download', middleStatic))
 app.use(mainSite)
-
 app.use(koaBody({
-    multipart: true
+    multipart: true,
+    formidable: {
+        uploadDir: STATIC_FILE_URL
+    }
 }))
+app.use(router.routes()).use(router.allowedMethods())
 // 支持查询参数
 // 支持body[form-data;x-www-urlencoded;json;text/plain]
-app.use(async (ctx, next) => {
-    ctx.body = {
-        method: ctx.request.method,
-        url: ctx.request.url,
-        params: ctx.request.query,
-        body: ctx.request.body
-    }
-})
+// app.use(async (ctx, next) => {
+//     ctx.body = {
+//         method: ctx.request.method,
+//         url: ctx.request.url,
+//         params: ctx.request.query,
+//         body: ctx.request.body,
+//         fileUrl: `${DOWNLOAD_URL}/${ctx.request.files.upload.newFilename}`
+//     }
+// })
 
 // 启动服务器，监听端口
 app.listen(3000, 'localhost', () => {
