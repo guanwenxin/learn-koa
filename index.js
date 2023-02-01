@@ -47,6 +47,7 @@
 const Koa = require('koa')
 const KoaMount = require('koa-mount')
 const KoaStatic = require('koa-static')
+const { koaBody } = require('koa-body')
 // 创建koa应用
 const app = new Koa();
 
@@ -64,6 +65,20 @@ const mainSite = KoaStatic('./website')
 // 1.开发一个静态文件服务器
 app.use(KoaMount('/download', middleStatic))
 app.use(mainSite)
+
+app.use(koaBody({
+    multipart: true
+}))
+// 支持查询参数
+// 支持body[form-data;x-www-urlencoded;json;text/plain]
+app.use(async (ctx, next) => {
+    ctx.body = {
+        method: ctx.request.method,
+        url: ctx.request.url,
+        params: ctx.request.query,
+        body: ctx.request.body
+    }
+})
 
 // 启动服务器，监听端口
 app.listen(3000, 'localhost', () => {
