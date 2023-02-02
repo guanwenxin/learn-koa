@@ -78,7 +78,11 @@ app.use(mainSite)
 app.use(koaBody({
     multipart: true,
     formidable: {
-        uploadDir: STATIC_FILE_URL
+        uploadDir: STATIC_FILE_URL,
+        // filename: function (name, ext, part, form) {
+        //     // console.log(name, ext, part, form)
+        //     return `${name}.${ext}`;
+        // }
     }
 }))
 app.use(router.routes()).use(router.allowedMethods())
