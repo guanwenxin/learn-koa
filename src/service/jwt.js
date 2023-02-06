@@ -11,7 +11,8 @@ const Jwt = require('jsonwebtoken')
 const SECRET_KEY = '123456fghj'
 
 function createToken(payload) {
-    const token = Jwt.sign({ ...payload, /**token有效期 */exp: Math.floor(Date.now() / 1000) + 1 }, SECRET_KEY)
+    // const token = Jwt.sign({ ...payload, /**token有效期 */exp: Math.floor(Date.now() / 1000) + 1 }, SECRET_KEY)
+    const token = Jwt.sign({ ...payload, /**token有效期 */exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24) }, SECRET_KEY)
     return token;
 }
 
