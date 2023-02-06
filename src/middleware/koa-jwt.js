@@ -9,10 +9,11 @@ const WhiteList = [
 
 async function jwtMiddle(ctx, next) {
     const url = ctx.request.url.split('?')[0]
-    if (WhiteList.includes(url)) {
+    if (WhiteList.includes(url) || ctx.request.method.toLowerCase() === 'options') {
         await next();
     } else {
         // TODO: 验证token是否合法
+        console.log(ctx.request.url, ctx.request.method)
         if (verifyToken(ctx.request.header.token)) {
             await next();
         } else {

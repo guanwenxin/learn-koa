@@ -9,7 +9,8 @@ async function query(sql) {
         connection = await Mysql2.createConnection({
             host: 'static.guanwenxin.info',
             user: 'root',
-            database: 'nodejs-koa',
+            // database: 'nodejs-koa',
+            database: 'koa',
             password: '123456'
         });
     }
